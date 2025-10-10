@@ -1,0 +1,105 @@
+replicaCount: ${replica_count}
+tls:
+  certData: ${cert_data}
+  keyData: ${key_data}
+  caCertData: ${ca_cert_data}
+image:
+  repository: images.releases.hashicorp.com
+  name: hashicorp/terraform-enterprise
+  tag: ${tfe_release}
+service:
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /_health_check  
+
+# serviceAccount:
+#   enabled: true
+#   name: "terraform-enterprise"
+#   annotations:
+#     azure.workload.identity/client-id: ${client_id_oidc}
+#   labels:
+#     azure.workload.identity/use: "true"
+# pod:
+#   serviceAccountName: "terraform-enterprise"
+#   labels:
+#     azure.workload.identity/use: "true"
+# agents:
+#   rbac:
+#     enabled: true    
+
+# securityContext:
+#   runAsNonRoot: true
+#   runAsUser: 1000
+#   fsGroup: 1012
+
+# container:
+# # Configure pod specific security context settings
+#   securityContext: 
+#     seccompProfile:
+#       type: RuntimeDefault
+#     allowPrivilegeEscalation: false
+#     capabilities:
+#       drop:
+#         - ALL
+#     runAsNonRoot: true
+
+# openshift:
+#   enabled: true
+
+# agentWorkerPodTemplate:
+#   spec:
+#     initContainers:
+#       - name: dns-check
+#         image: busybox
+#         command:
+#           - sh
+#           - -c
+#           - |
+#             echo "Checking DNS...";
+#             until nslookup otel-collector.terraform-enterprise-agents.svc.cluster.local; do
+#               echo "DNS not ready, waiting...";
+#               sleep 2;
+#             done
+#             sleep 30  
+#     containers:
+#     - env:
+#       - name: TFC_AGENT_OTLP_ADDRESS
+#         value: otel-collector.terraform-enterprise-agents.svc.cluster.local:4317
+#       - name: TFC_AGENT_AUTO_UPDATE
+#         value: disabled  
+
+env:
+  variables:
+    # TFE_RUN_PIPELINE_KUBERNETES_OPEN_SHIFT_ENABLED: "true"
+    # TFE_RUN_PIPELINE_IMAGE: hashicorp/tfc-agent:1.15.5
+    TFE_HOSTNAME: ${fqdn}
+    TFE_IACT_SUBNETS: "0.0.0.0/0"
+
+    # Database Settings
+    TFE_DATABASE_USER: ${pg_user}
+    TFE_DATABASE_PASSWORD: ${pg_password}
+    TFE_DATABASE_HOST: ${pg_address}
+    TFE_DATABASE_NAME: ${pg_dbname}
+    TFE_DATABASE_PARAMETERS: "sslmode=require"
+    
+    # MSI redis
+    TFE_REDIS_HOST: ${redis_host}:6380
+    TFE_REDIS_USE_AUTH: false
+    TFE_REDIS_PASSWORDLESS_AZURE_USE_MSI: true
+    TFE_REDIS_SIDEKIQ_PASSWORDLESS_AZURE_USE_MSI: true
+    TFE_REDIS_PASSWORDLESS_AZURE_CLIENT_ID: ${tfe_redis_passwordless_azure_client_id}
+    TFE_REDIS_USER: ${tfe_redis_user}
+    TFE_REDIS_USE_TLS: true
+
+    # Object storage settings.
+    TFE_OBJECT_STORAGE_TYPE: "azure"
+
+    TFE_OBJECT_STORAGE_AZURE_ACCOUNT_NAME: ${storage_account}
+    TFE_OBJECT_STORAGE_AZURE_CONTAINER: ${container_name}
+    TFE_OBJECT_STORAGE_AZURE_USE_MSI: false
+
+    # TFE_OBJECT_STORAGE_AZURE_ACCOUNT_KEY: bmljb2tub3dzYmVzdAo=            # added because of a bug in TFE 202410-1
+    TFE_OBJECT_STORAGE_AZURE_ACCOUNT_KEY: ${storage_account_key}        # Uncomment this line if you are using account key otherwise workload identity will be used.
+  secrets:
+    TFE_DATABASE_PASSWORD: ${pg_password}
+    TFE_ENCRYPTION_PASSWORD:  ${enc_password}
+    TFE_LICENSE: ${tfe_license}
