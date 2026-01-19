@@ -80,15 +80,20 @@ env:
     TFE_DATABASE_HOST: ${pg_address}
     TFE_DATABASE_NAME: ${pg_dbname}
     TFE_DATABASE_PARAMETERS: "sslmode=require"
-    
-    # MSI redis
-    TFE_REDIS_HOST: ${redis_host}:6380
-    TFE_REDIS_USE_AUTH: false
-    TFE_REDIS_PASSWORDLESS_AZURE_USE_MSI: true
-    TFE_REDIS_SIDEKIQ_PASSWORDLESS_AZURE_USE_MSI: true
-    TFE_REDIS_PASSWORDLESS_AZURE_CLIENT_ID: ${tfe_redis_passwordless_azure_client_id}
-    TFE_REDIS_USER: ${tfe_redis_user}
-    TFE_REDIS_USE_TLS: true
+
+    # logging
+    # TFE_LOG_LEVEL: "DEBUG"
+
+    TFE_REDIS_HOST: ${redis_host}:${redis_port}
+    TFE_REDIS_USE_AUTH: true
+    TFE_REDIS_PASSWORD: ${redis_primary_access_key}
+
+
+    TFE_REDIS_SIDEKIQ_HOST: ${redis_sidekiq_host}:${redis_sidekiq_port}
+    TFE_REDIS_SIDEKIQ_USE_AUTH: true
+    TFE_REDIS_SIDEKIQ_PASSWORD: ${redis_sidekiq_primary_access_key}
+
+
 
     # Object storage settings.
     TFE_OBJECT_STORAGE_TYPE: "azure"

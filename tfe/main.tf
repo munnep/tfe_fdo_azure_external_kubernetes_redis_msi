@@ -121,10 +121,18 @@ resource "helm_release" "tfe" {
       cert_data                = "${base64encode(local.full_chain)}"
       key_data                 = "${base64encode(nonsensitive(acme_certificate.certificate.private_key_pem))}"
       ca_cert_data             = "${base64encode(local.full_chain)}"
-      redis_host               = data.terraform_remote_state.infra.outputs.redis_host
-      redis_port               = data.terraform_remote_state.infra.outputs.redis_port
-      tfe_redis_passwordless_azure_client_id = data.terraform_remote_state.infra.outputs.tfe_redis_passwordless_azure_client_id
-      tfe_redis_user= data.terraform_remote_state.infra.outputs.tfe_redis_user
+      redis_host               = data.terraform_remote_state.infra.outputs.redis_managed_host
+      redis_port               = data.terraform_remote_state.infra.outputs.redis_managed_port
+      redis_primary_access_key = data.terraform_remote_state.infra.outputs.redis_managed_primary_access_key
+
+      redis_sidekiq_host               = data.terraform_remote_state.infra.outputs.redis_sidekiq_managed_host
+      redis_sidekiq_port               = data.terraform_remote_state.infra.outputs.redis_sidekiq_managed_port
+      redis_sidekiq_primary_access_key = data.terraform_remote_state.infra.outputs.redis_sidekiq_managed_primary_access_key
+
+
+
+      # tfe_redis_passwordless_azure_client_id = data.terraform_remote_state.infra.outputs.tfe_redis_passwordless_azure_client_id
+      # tfe_redis_user= data.terraform_remote_state.infra.outputs.tfe_redis_user
       storage_account_key      = data.terraform_remote_state.infra.outputs.storage_account_key
       storage_account          = data.terraform_remote_state.infra.outputs.storage_account
       container_name           = data.terraform_remote_state.infra.outputs.container_name

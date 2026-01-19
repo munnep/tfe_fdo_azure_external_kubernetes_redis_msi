@@ -9,25 +9,25 @@ resource "azurerm_user_assigned_identity" "tfe" {
 
 
 # Create Redis access policy assignment for the managed identity
-resource "azurerm_redis_cache_access_policy_assignment" "tfe_redis_access" {
-  name               = "tfe-redis-access"
-  redis_cache_id     = azurerm_redis_cache.example.id
-  access_policy_name = "Data Owner"
-  object_id          = azurerm_user_assigned_identity.tfe.principal_id
-  object_id_alias    = azurerm_user_assigned_identity.tfe.principal_id
-}
+# resource "azurerm_redis_cache_access_policy_assignment" "tfe_redis_access" {
+#   name               = "tfe-redis-access"
+#   redis_cache_id     = azurerm_redis_cache.example.id
+#   access_policy_name = "Data Owner"
+#   object_id          = azurerm_user_assigned_identity.tfe.principal_id
+#   object_id_alias    = azurerm_user_assigned_identity.tfe.principal_id
+# }
 
 
-data "azurerm_subscription" "primary" {
-}
+# data "azurerm_subscription" "primary" {
+# }
 
 
-# for the permissions for loadbalancers (using the primary TFE identity)
-resource "azurerm_role_assignment" "aks_network_contributor" {
-  scope                = data.azurerm_subscription.primary.id
-  role_definition_name = "Network Contributor"
-  principal_id         = azurerm_user_assigned_identity.tfe.principal_id
-}
+# # for the permissions for loadbalancers (using the primary TFE identity)
+# resource "azurerm_role_assignment" "aks_network_contributor" {
+#   scope                = data.azurerm_subscription.primary.id
+#   role_definition_name = "Network Contributor"
+#   principal_id         = azurerm_user_assigned_identity.tfe.principal_id
+# }
 
 # Grant Managed Identity Operator role to the control plane identity for kubelet identity
 resource "azurerm_role_assignment" "aks_kubelet_identity_operator" {

@@ -43,31 +43,31 @@ output "storage_account_key" {
 }
 
 
-output "redis_host" {
-  value = azurerm_redis_cache.example.hostname
-}
+# output "redis_host" {
+#   value = azurerm_redis_cache.example.hostname
+# }
 
-output "redis_port" {
-  value = azurerm_redis_cache.example.port
-}
+# output "redis_port" {
+#   value = azurerm_redis_cache.example.port
+# }
 
-output "redis_primary_access_key" {
-  value = azurerm_redis_cache.example.primary_access_key
-  sensitive = true
-}
+# output "redis_primary_access_key" {
+#   value = azurerm_redis_cache.example.primary_access_key
+#   sensitive = true
+# }
 
-# TFE Redis Passwordless Authentication Configuration
-output "tfe_redis_passwordless_azure_client_id" {
-  description = "The Client ID for TFE_REDIS_PASSWORDLESS_AZURE_CLIENT_ID"
-  value       = azurerm_user_assigned_identity.tfe.client_id
-}
+# # TFE Redis Passwordless Authentication Configuration
+# output "tfe_redis_passwordless_azure_client_id" {
+#   description = "The Client ID for TFE_REDIS_PASSWORDLESS_AZURE_CLIENT_ID"
+#   value       = azurerm_user_assigned_identity.tfe.client_id
+# }
 
-output "tfe_redis_user" {
-  description = "The Managed Identity OID for TFE_REDIS_USER"
-  value       = azurerm_user_assigned_identity.tfe.principal_id
-}
+# output "tfe_redis_user" {
+#   description = "The Managed Identity OID for TFE_REDIS_USER"
+#   value       = azurerm_user_assigned_identity.tfe.principal_id
+# }
 
-output "tfe_redis_managed_identity_name" {
-  description = "The name of the managed identity for TFE Redis access"
-  value       = azurerm_user_assigned_identity.tfe.name
-}
+# output "tfe_redis_managed_identity_name" {
+#   description = "The name of the managed identity for TFE Redis access"
+#   value       = azurerm_user_assigned_identity.tfe.name
+# }

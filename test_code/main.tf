@@ -4,7 +4,7 @@ terraform {
     organization = "test"
 
     workspaces {
-      name = "test2"
+      name = "test5"
     }
   }
 }

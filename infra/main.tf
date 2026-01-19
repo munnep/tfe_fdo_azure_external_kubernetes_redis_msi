@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "4.43.0"
+      # version = "4.52.0"
     }
     acme = {
       source  = "vancluever/acme"
@@ -263,27 +263,8 @@ resource "azurerm_storage_account" "example" {
 
 resource "azurerm_storage_container" "example" {
   name                  = "${var.tag_prefix}-container"
-  storage_account_name  = azurerm_storage_account.example.name
+  storage_account_id    = azurerm_storage_account.example.id
   container_access_type = "private"
-}
-
-resource "azurerm_redis_cache" "example" {
-  name                      = "${var.tag_prefix}-redis2"
-  location                  = azurerm_resource_group.tfe.location
-  resource_group_name       = azurerm_resource_group.tfe.name
-  capacity                  = 1
-  family                    = "P"
-  sku_name                  = "Premium"
-  non_ssl_port_enabled      = false
-  minimum_tls_version       = "1.2"
-  private_static_ip_address = cidrhost(cidrsubnet(var.vnet_cidr, 8, 12), 22)
-  subnet_id                 = azurerm_subnet.private2.id
-  # redis_version             = 6
-
-redis_configuration {
-  active_directory_authentication_enabled = true
-  # authentication_enabled = false 
-}
 }
 
 resource "azurerm_kubernetes_cluster" "example" {
