@@ -106,7 +106,7 @@ load_balancer_type         = "external"                                # If you 
 # AWS
 region                     = "eu-north-1"                              # To create the DNS record on AWS     
 # Azure
-subscription_id   = "c58f91c0-ac20-42fe-982f-xxxxxxx"                  # subscription ID
+subscription_id   = "c58f91c0-ac20-42fe-982f-xxxxxxx"                  # subscription ID 
 ```
 - Initialize the environment
 ```
